@@ -1,6 +1,7 @@
 package com.todo_manager.controllers;
 
 import com.todo_manager.models.Todo;
+import com.todo_manager.services.TodoServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
-import com.todo_manager.services.TodoServices;
+import com.todo_manager.services.impl.TodoServicesImpl;
 
 import java.util.List;
 import java.util.*;
@@ -64,11 +65,5 @@ public class todoControllers {
         return new ResponseEntity<>("Todo deleted successfully", HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<String> deleteAllTodosHandler() {
-        logger.info("Deleting all todos");
-        todoServices.deleteAllTodos();
-        return new ResponseEntity<>("All todos deleted successfully", HttpStatus.OK);
-    }
 
 }

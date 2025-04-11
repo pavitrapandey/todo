@@ -11,6 +11,7 @@ import com.todo_manager.dao.TodoDao;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 public class TodoManagerApplication implements CommandLineRunner {
@@ -29,8 +30,8 @@ public class TodoManagerApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		JdbcTemplate template=todoDao.getTemplate();
-		logger.info("JdbcTemplate is {}",template);
+//		JdbcTemplate template=todoDao.getTemplate();
+//		logger.info("JdbcTemplate is {}",template);
 
 //		Todo todo=new Todo();
 //		todo.setId(1);
@@ -52,12 +53,18 @@ public class TodoManagerApplication implements CommandLineRunner {
 //
 //
 //		todoDao.insertQuery(todo);
+//
+//		logger.info("Inserted  todo is {}", todo);
 
 //
 
-		todoDao.deleteMultipleTodos(new int[]{1, 2, 3});
+//		todoDao.deleteMultipleTodos(new int[]{1, 2, 3});
 
+//		Todo todo1=todoDao.getTodo(0);
 
-//		logger.info("inserted todo is {}", todo);
+//		List<Todo> todo=todoDao.getAllTodos();
+//
+//
+//		logger.info(" todo is {}", todo);
 	}
 }

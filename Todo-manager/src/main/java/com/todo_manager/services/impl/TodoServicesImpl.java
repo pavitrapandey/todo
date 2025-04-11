@@ -1,22 +1,20 @@
-package com.todo_manager.services;
+package com.todo_manager.services.impl;
 
 import com.todo_manager.Exception.ResourceNotFoundException;
 import com.todo_manager.models.Todo;
+import com.todo_manager.services.TodoServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.ResolutionException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
-public class TodoServices {
-    Logger logger= LoggerFactory.getLogger(TodoServices.class);
+public class TodoServicesImpl implements TodoServices {
+    Logger logger= LoggerFactory.getLogger(TodoServicesImpl.class);
     List<Todo> todoList=new ArrayList<>();
     public Todo createTodo(Todo todo){
         logger.info("todos {}", this.todoList);
@@ -39,6 +37,7 @@ public class TodoServices {
         todo1.setTitle(todo.getTitle());
         todo1.setContent(todo.getContent());
         todo1.setStatus(todo.getStatus());
+
         logger.info("Updated TODO {}", todo1);
         return todo1;
     }
@@ -49,9 +48,5 @@ public class TodoServices {
         todoList=newList;
     }
 
-    public void deleteAllTodos() {
-        logger.info("Deleting all TODOs");
-        todoList.clear();
 
-    }
 }

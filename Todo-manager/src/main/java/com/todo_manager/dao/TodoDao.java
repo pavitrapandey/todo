@@ -16,11 +16,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
+@Repository
 public class TodoDao {
 
     Logger logger= LoggerFactory.getLogger(TodoDao.class);
     private JdbcTemplate template;
+
+
 
     public TodoDao(@Autowired JdbcTemplate template) {
         this.template = template;
@@ -39,6 +41,8 @@ public class TodoDao {
         this.template = template;
     }
 
+
+    // INSERTION OF DATA
     public Todo insertQuery(Todo todo){
         String insert="insert into todos(id,title,content,status,addedDate,todoDate) values(?,?,?,?,?,?)";
         int result=template.update(insert,todo.getId(),todo.getTitle(),todo.getContent(),todo.getStatus(),todo.getAddedDate(),todo.getTodoDate());
@@ -46,56 +50,63 @@ public class TodoDao {
         return todo;
     }
 
+    //GET A TODO WITH THE ID
     public Todo getTodo(int id){
         String Query="select * from todos where id=?";
-        Map<String,Object> data= template.queryForMap(Query, id);
+
+       Todo todo= template.queryForObject(Query,new TodoRowMapper(),id);
 
 
-        Todo todo=new Todo();
-        todo.setId((int) data.get("id"));
-        todo.setTitle((String) data.get("title"));
-        todo.setContent((String) data.get("content"));
-        todo.setStatus((String) data.get("status"));
-        todo.setAddedDate((Date) data.get("addedDate"));
-        todo.setTodoDate((Date) data.get("todoDate"));
-
-        logger.info("Todo from DB {}", todo);
+//        Todo todo=new Todo();
+//        todo.setId((int) data.get("id"));
+//        todo.setTitle((String) data.get("title"));
+//        todo.setContent((String) data.get("content"));
+//        todo.setStatus((String) data.get("status"));
+//        todo.setAddedDate((Date) data.get("addedDate"));
+//        todo.setTodoDate((Date) data.get("todoDate"));
+//
+//        logger.info("Todo from DB {}", todo);
 
         return todo;
     }
 
+
+    //GET ALL TODO FROM DATABASE
     public List<Todo> getAllTodos(){
         String Query="select * from todos";
-        List<Map<String, Object>> data = template.queryForList(Query);
+//        List<Map<String, Object>> data = template.queryForList(Query);
 
-        List<Todo> collectTodos =  data.stream().map((map)->{
+        List<Todo> collectTodos =template.query(Query,new TodoRowMapper());
 
 
-                    Todo todo=new Todo();
-                    todo.setId((int) map.get("id"));
-                    todo.setTitle((String) map.get("title"));
-                    todo.setContent((String) map.get("content"));
-                    todo.setStatus((String) map.get("status"));
-                    todo.setAddedDate((Date) map.get("addedDate"));
-                    todo.setTodoDate((Date) map.get("todoDate"));
-
-                    logger.info("Todo from DB {}", todo);
-                    return todo;
-                }).collect(Collectors.toList());
+//                    Todo todo=new Todo();
+//                    todo.setId((int) map.get("id"));
+//                    todo.setTitle((String) map.get("title"));
+//                    todo.setContent((String) map.get("content"));
+//                    todo.setStatus((String) map.get("status"));
+//                    todo.setAddedDate((Date) map.get("addedDate"));
+//                    todo.setTodoDate((Date) map.get("todoDate"));
+//
+//                    logger.info("Todo from DB {}", todo);
+//                    return todo;
+//                }).collect(Collectors.toList());
 
 
         return collectTodos;
     }
 
-    public Todo updateTodo(int id, Todo todo){
-        String Query="update todos set title=?,content=?,status=?,addedDate=?,todoDate=? where id=?";
 
-        int update=template.update(Query,todo.getTitle(),todo.getContent(),todo.getStatus(),todo.getAddedDate(),todo.getTodoDate(),id);
+    //UPDATE THE TODO IN DATABASE
+    public Todo updateTodo(int id, Todo todo){
+        String Query="update todos set title=?,content=?,status=?,todoDate=? where id=?";
+
+        int update=template.update(Query,todo.getTitle(),todo.getContent(),todo.getStatus(),todo.getTodoDate(),id);
         logger.info("Result of update query {}", update);
         todo.setId(id);
         return todo;
     }
 
+    //DELETE A TODO USING ID ON DATABSE
     public Todo deleteTodo(int id){
         String Query="delete from todos where id=?";
         int update=template.update(Query, id);
@@ -103,6 +114,8 @@ public class TodoDao {
         return null;
     }
 
+
+    //DELETE MULTIPLE TODOS USING IDS
     public void deleteMultipleTodos(int[] ids) {
         String query = "DELETE FROM todos WHERE id=?";
 
