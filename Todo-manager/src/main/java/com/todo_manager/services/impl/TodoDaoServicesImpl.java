@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Service
-@Primary
+
 public class TodoDaoServicesImpl implements TodoServices{
 
     @Autowired
